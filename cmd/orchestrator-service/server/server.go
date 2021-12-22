@@ -17,6 +17,8 @@ import (
 	"google.golang.org/grpc"
 )
 
+// If we want more than two instances of the service, we can take an array as well.
+
 // For instance running on port 9000
 var grpcServer_1 *grpc.Server
 

@@ -25,7 +25,7 @@
 - Both the services supports REST as well as gRPC requests.
 
 ## Project Structure
-![Project Structure](./images/project-structure.png)
+![Project Structure](./images/project-structure.PNG)
 
 ### Description
 
@@ -99,8 +99,8 @@ DataMock: REST->8002 gRPC->10000
 - Import /cmd/proto/orchestratorService.proto in BloomRPC and make calls to the methods.
 
 
-![Postman GetUserByName Success](./images/Postman-success.png)
-![Postman GetUserByName Failure](./images/Postman-failure.png)
-![BloomRPC GetUserByName Success](./images/BloomRPC-success.png)
-![BloomRPC GetUserByName Failure](./images/BloomRPC-failure.png)
+![Postman GetUserByName Success](./images/Postman-success.PNG)
+![Postman GetUserByName Failure](./images/Postman-failure.PNG)
+![BloomRPC GetUserByName Success](./images/BloomRPC-success.PNG)
+![BloomRPC GetUserByName Failure](./images/BloomRPC-failure.PNG)
 
