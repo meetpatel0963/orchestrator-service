@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	proto "github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/proto"
+	proto "github.com/meetpatel0963/go-orchestrator-service/cmd/proto"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -42,5 +42,5 @@ type OrchestratorServer struct {
 }
 
 func (OrchestratorServer) GetUserByName(ctx context.Context, r *proto.GetUserByNameRequest) (*proto.GetUserByNameResponse, error) {
-	return nil, status.Error(codes.Internal, "not implemented yet. Meet Patel will implement me")
+	return nil, status.Error(codes.Unimplemented, "not implemented yet. Meet Patel will implement me")
 }
