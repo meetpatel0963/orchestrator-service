@@ -54,6 +54,15 @@ func cleanup() {
 	fmt.Println("Server stopped.")
 }
 
+/*
+	We can create an interface with StartServer and StopServer methods and service name
+	and use that interface to create both the servers: orchestrator and datamock(dummy data)
+	But, we will have to either start and stop both the servers together or create global vars
+	and separate files for both the servers.
+
+	Here, I have implemented both the services in separate directories. If number of services using the
+	same proto file are more then we can use the interface.
+*/
 func main() {
 	// To create a channel that listens to keyboard interrupts (cntrl+C) and stop the server gracefully on interrupt
 	sigs := make(chan os.Signal, 1)
