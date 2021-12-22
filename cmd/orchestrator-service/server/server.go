@@ -12,48 +12,63 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	config "github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/config"
-	"github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/service"
+	service "github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/service"
 	proto "github.com/meetpatel0963/go-orchestrator-service/cmd/proto"
 	"google.golang.org/grpc"
 )
 
-var grpcServer *grpc.Server
+// For instance running on port 9000
+var grpcServer_1 *grpc.Server
+
+// For instance running on port 9001
+var grpcServer_2 *grpc.Server
 
 // To Create REST and gRPC servers
-func StartServer() {
+func StartServer(grpcServer **grpc.Server, rest_port string, grpc_port string) {
 	mux := runtime.NewServeMux()
 	proto.RegisterOrchestratorServiceHandlerServer(context.Background(), mux, service.OrchestratorServer{})
 
 	go func() {
-		log.Fatalln(http.ListenAndServe(config.REST_PORT, mux))
+		log.Fatalln(http.ListenAndServe(rest_port, mux))
 	}()
 
-	grpcServer = grpc.NewServer()
-	proto.RegisterOrchestratorServiceServer(grpcServer, service.OrchestratorServer{})
-	listener, err := net.Listen("tcp", config.GRPC_PORT)
+	*grpcServer = grpc.NewServer()
+	proto.RegisterOrchestratorServiceServer(*grpcServer, service.OrchestratorServer{})
+	listener, err := net.Listen("tcp", grpc_port)
 
 	if err != nil {
 		log.Fatal("Error creating listener: ", err.Error())
 	}
 
 	go func() {
-		log.Fatalln(grpcServer.Serve(listener))
+		log.Fatalln((*grpcServer).Serve(listener))
 	}()
 }
 
 // To stop the server gracefully
-func StopServer() {
-	if grpcServer != nil {
-		grpcServer.GracefulStop()
+func StopServer(grpcServer **grpc.Server) {
+	if *grpcServer != nil {
+		(*grpcServer).GracefulStop()
 	}
 }
 
 func cleanup() {
-	fmt.Println("Stopping server gracefully...")
-	StopServer()
-	fmt.Println("Server stopped.")
+	fmt.Println("Stopping servers gracefully...")
+	StopServer(&grpcServer_1)
+	StopServer(&grpcServer_2)
+	fmt.Println("Servers stopped.")
 }
 
+/*
+	REST_PORT_1: REST PORT for Orchestrator instance 1 -> 8000
+	GRPC_PORT_1: GRPC PORT for Orchestrator instance 1 -> 9000
+
+	REST_PORT_2: REST PORT for Orchestrator instance 2 -> 8001
+	GRPC_PORT_2: GRPC PORT for Orchestrator instance 2 -> 9001
+
+	Note: Orchestration Logic is in the service/service.go instead of logic folder
+		  to maintain the same structure throughout the project.
+*/
 func main() {
 	// To create a channel that listens to keyboard interrupts (cntrl+C) and stop the server gracefully on interrupt
 	sigs := make(chan os.Signal, 1)
@@ -66,9 +81,10 @@ func main() {
 		done <- true
 	}()
 
-	fmt.Println("Starting server...")
-	StartServer()
-	fmt.Println("Server started.")
+	fmt.Println("Starting servers...")
+	StartServer(&grpcServer_1, config.REST_PORT_1, config.GRPC_PORT_1)
+	StartServer(&grpcServer_2, config.REST_PORT_2, config.GRPC_PORT_2)
+	fmt.Println("Servers started.")
 
 	<-done
 }
