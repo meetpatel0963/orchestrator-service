@@ -6,7 +6,7 @@ import (
 	"log"
 
 	config "github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/config"
-	proto "github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/proto"
+	proto "github.com/meetpatel0963/go-orchestrator-service/cmd/proto"
 	"google.golang.org/grpc"
 )
 

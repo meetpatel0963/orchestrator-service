@@ -11,8 +11,8 @@ import (
 	"syscall"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	config "github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/config"
-	"github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/service"
+	config "github.com/meetpatel0963/go-orchestrator-service/cmd/datamock-service/config"
+	service "github.com/meetpatel0963/go-orchestrator-service/cmd/datamock-service/service"
 	proto "github.com/meetpatel0963/go-orchestrator-service/cmd/proto"
 	"google.golang.org/grpc"
 )
@@ -22,14 +22,14 @@ var grpcServer *grpc.Server
 // To Create REST and gRPC servers
 func StartServer() {
 	mux := runtime.NewServeMux()
-	proto.RegisterOrchestratorServiceHandlerServer(context.Background(), mux, service.OrchestratorServer{})
+	proto.RegisterDataMockServiceHandlerServer(context.Background(), mux, service.DataMockServer{})
 
 	go func() {
 		log.Fatalln(http.ListenAndServe(config.REST_PORT, mux))
 	}()
 
 	grpcServer = grpc.NewServer()
-	proto.RegisterOrchestratorServiceServer(grpcServer, service.OrchestratorServer{})
+	proto.RegisterDataMockServiceServer(grpcServer, service.DataMockServer{})
 	listener, err := net.Listen("tcp", config.GRPC_PORT)
 
 	if err != nil {

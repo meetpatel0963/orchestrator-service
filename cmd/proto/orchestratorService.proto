@@ -4,14 +4,20 @@ package orchestratorserviceproto;
 
 import "google/api/annotations.proto";
 
-option go_package = "github.com/meetpatel0963/go-orchestrator-service/cmd/orchestrator-service/proto/orchestratorserviceproto";
+option go_package = "github.com/meetpatel0963/go-orchestrator-service/cmd/proto/orchestratorserviceproto";
 
 // protoc -I . --grpc-gateway_out . --grpc-gateway_opt logtostderr=true --grpc-gateway_opt paths=source_relative --grpc-gateway_opt generate_unbound_methods=true orchestratorService.proto
 // protoc --go_out=paths=source_relative:. --go-grpc_out=paths=source_relative:. orchestratorService.proto
 
 service OrchestratorService {
     rpc GetUserByName(GetUserByNameRequest) returns (GetUserByNameResponse) {
-        option (google.api.http) = { get: "/api/v1/users" };
+        option (google.api.http) = { get: "/api/v1/users/{name}" };
+    }
+}
+
+service DataMockService {
+    rpc GetMockUserData(GetMockUserDataRequest) returns (GetMockUserDataResponse) {
+        option (google.api.http) = { get: "/api/v1/users/data/{name}" };
     }
 }
 
@@ -26,5 +32,13 @@ message GetUserByNameRequest {
 }
 
 message GetUserByNameResponse {
+    User user = 1;
+}
+
+message GetMockUserDataRequest {
+    string name = 1;
+}
+
+message GetMockUserDataResponse {
     User user = 1;
 }
